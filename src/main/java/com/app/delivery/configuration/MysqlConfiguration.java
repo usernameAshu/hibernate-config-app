@@ -71,8 +71,8 @@ public class MysqlConfiguration {
 		return sessionFactory;
 	}
 
-	@Bean
-	public HibernateTransactionManager transactionManager() {
+	@Bean(name = "transactionManager")
+	public HibernateTransactionManager hibernateTransactionManager() {
 		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
 		transactionManager.setSessionFactory(sessionFactory().getObject());
 
