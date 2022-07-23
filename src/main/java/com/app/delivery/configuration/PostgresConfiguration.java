@@ -7,7 +7,6 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
@@ -16,36 +15,35 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(entityManagerFactoryRef = "mysqlSessionFactory", 
-						transactionManagerRef = "mysqlHibernateTransactionManager")
-public class MysqlConfiguration {
-
-	@Value("${mysql.datasource.driver}")
+@EnableJpaRepositories(entityManagerFactoryRef = "postgreSessionFactory",
+						transactionManagerRef = "postgreHibernateTransactionManager")
+public class PostgresConfiguration {
+	
+	@Value("${postgre.datasource.driver}")
 	private String driver;
 
-	@Value("${mysql.datasource.url}")
+	@Value("${postgre.datasource.url}")
 	private String databaseUrl;
 
-	@Value("${mysql.datasource.username}")
+	@Value("${postgre.datasource.username}")
 	private String username;
 
-	@Value("${mysql.datasource.password}")
+	@Value("${postgre.datasource.password}")
 	private String password;
 
-	@Value("${mysql.jpa.hibernate.ddl-auto}")
+	@Value("${postgre.jpa.hibernate.ddl-auto}")
 	private String hibernate_ddlauto;
-	@Value("${mysql.jpa.properties.hibernate.dialect}")
+	@Value("${postgre.jpa.properties.hibernate.dialect}")
 	private String hibernate_dialect;
-	@Value("${mysql.jpa.show-sql}")
+	@Value("${postgre.jpa.show-sql}")
 	private String hibernate_showsql;
-	@Value("${mysql.jpa.properties.hibernate.format_sql}")
+	@Value("${postgre.jpa.properties.hibernate.format_sql}")
 	private String hibernate_formatsql;
 
-	@Value("${mysql.packagesToScan}")
+	@Value("${postgre.packagesToScan}")
 	private String packagesToScan;
-
-	@Bean(name = "mysql_datasource")
-	@Primary
+	
+	@Bean(name = "postgre_datasource")
 	public DataSource getDataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName(driver);
@@ -55,7 +53,7 @@ public class MysqlConfiguration {
 
 		return dataSource;
 	}
-
+	
 	private Properties hibernateProperties() {
 		Properties properties = new Properties();
 		properties.put("hibernate.dialect", hibernate_dialect);
@@ -67,8 +65,7 @@ public class MysqlConfiguration {
 	}
 
 	@Bean
-	@Primary
-	public LocalSessionFactoryBean mysqlSessionFactory() {
+	public LocalSessionFactoryBean postgreSessionFactory() {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		sessionFactory.setDataSource(getDataSource());
 		sessionFactory.setHibernateProperties(hibernateProperties());
@@ -78,10 +75,11 @@ public class MysqlConfiguration {
 	}
 
 	@Bean
-	public HibernateTransactionManager mysqlHibernateTransactionManager() {
+	public HibernateTransactionManager postgreHibernateTransactionManager() {
 		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-		transactionManager.setSessionFactory(mysqlSessionFactory().getObject());
+		transactionManager.setSessionFactory(postgreSessionFactory().getObject());
 
 		return transactionManager;
 	}
+
 }
