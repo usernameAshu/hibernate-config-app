@@ -1,5 +1,14 @@
 package com.app.delivery.dao;
 
-public class PaymentDao {
+import java.util.List;
 
+import com.app.delivery.entityPayment.PaymentInvoice;
+
+public interface PaymentDao {
+
+	public List<PaymentInvoice> getAllInvoice();
+
+	public void savePaymentInvoice(PaymentInvoice paymentInvoice);
+
+	public PaymentInvoice getPaymentInvoice(int id);
 }

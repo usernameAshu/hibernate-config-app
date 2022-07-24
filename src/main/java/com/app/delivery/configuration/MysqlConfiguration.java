@@ -78,6 +78,7 @@ public class MysqlConfiguration {
 	}
 
 	@Bean
+	@Primary
 	public HibernateTransactionManager mysqlHibernateTransactionManager() {
 		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
 		transactionManager.setSessionFactory(mysqlSessionFactory().getObject());
